@@ -28,18 +28,23 @@
    * @public
    */
   ns.ToolController.prototype.init = function() {
-    this.createToolsDom_();
-    this.addKeyboardShortcuts_();
+
+
+    // this.createToolsDom_();
+
+
+    // 绑定 键位
+    // this.addKeyboardShortcuts_();
 
     // Initialize tool:
     // Set SimplePen as default selected tool:
     this.selectTool_(this.tools[0]);
     // Activate listener on tool panel:
-    var toolSection = document.querySelector('#tool-section');
-    toolSection.addEventListener('mousedown', this.onToolIconClicked_.bind(this));
+    // var toolSection = document.querySelector('#tool-section');
+    // toolSection.addEventListener('mousedown', this.onToolIconClicked_.bind(this));
 
-    $.subscribe(Events.SELECT_TOOL, this.onSelectToolEvent_.bind(this));
-    $.subscribe(Events.SHORTCUTS_CHANGED, this.createToolsDom_.bind(this));
+    // $.subscribe(Events.SELECT_TOOL, this.onSelectToolEvent_.bind(this));
+    // $.subscribe(Events.SHORTCUTS_CHANGED, this.createToolsDom_.bind(this));
   };
 
   /**
@@ -67,16 +72,17 @@
    * @private
    */
   ns.ToolController.prototype.selectTool_ = function(tool) {
+
     this.currentSelectedTool = tool;
     this.activateToolOnStage_(this.currentSelectedTool);
 
-    var selectedToolElement = document.querySelector('#tool-section .tool-icon.selected');
-    if (selectedToolElement) {
-      selectedToolElement.classList.remove('selected');
-    }
+    // var selectedToolElement = document.querySelector('#tool-section .tool-icon.selected');
+    // if (selectedToolElement) {
+    //   selectedToolElement.classList.remove('selected');
+    // }
 
-    var toolElement = document.querySelector('[data-tool-id=' + tool.toolId + ']');
-    toolElement.classList.add('selected');
+    // var toolElement = document.querySelector('[data-tool-id=' + tool.toolId + ']');
+    // toolElement.classList.add('selected');
 
     $.publish(Events.TOOL_SELECTED, [tool]);
   };
@@ -85,6 +91,8 @@
    * @private
    */
   ns.ToolController.prototype.onToolIconClicked_ = function(evt) {
+
+    console.log(evt, 222);
     var target = evt.target;
     var clickedTool = pskl.utils.Dom.getParentWithData(target, 'toolId');
 

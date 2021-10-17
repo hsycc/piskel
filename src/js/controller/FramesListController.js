@@ -23,7 +23,11 @@
     this.cachedFrameProcessor.setFrameProcessor(this.frameToPreviewCanvas_.bind(this));
     this.cachedFrameProcessor.setOutputCloner(this.clonePreviewCanvas_.bind(this));
 
-    this.initDragndropBehavior_();
+    this.PREVIEW_FILM_SIZE = (document.querySelector('#add-frame-action-no-render') &&
+    document.querySelector('#add-frame-action-no-render').offsetWidth)  ||
+    Constants.PREVIEW_FILM_SIZE;
+
+    // this.initDragndropBehavior_();
   };
 
   ns.FramesListController.prototype.init = function() {
@@ -34,9 +38,11 @@
     $.subscribe(Events.PISKEL_RESET, this.refreshZoom_.bind(this));
 
     this.previewListScroller = document.querySelector('#preview-list-scroller');
-    this.previewListScroller.addEventListener('scroll', this.updateScrollerOverflows.bind(this));
+    // this.previewListScroller.addEventListener('scroll', this.updateScrollerOverflows.bind(this));
+
+    // 可以注释掉这行
     this.container.addEventListener('click', this.onContainerClick_.bind(this));
-    this.updateScrollerOverflows();
+    // this.updateScrollerOverflows();
   };
 
   ns.FramesListController.prototype.flagForRedraw_ = function (regenerateDom) {
@@ -89,6 +95,7 @@
   };
 
   ns.FramesListController.prototype.onContainerClick_ = function (event) {
+
     var target = pskl.utils.Dom.getParentWithData(event.target, 'tileAction');
     if (!target) {
       return;
@@ -101,12 +108,12 @@
       var clonedTile = this.createPreviewTile_(index + 1);
       this.previewList.insertBefore(clonedTile, this.tiles[index].nextSibling);
       this.tiles.splice(index, 0, clonedTile);
-      this.updateScrollerOverflows();
+      // this.updateScrollerOverflows();
     } else if (action === ACTION.DELETE) {
       this.piskelController.removeFrameAt(index);
       this.previewList.removeChild(this.tiles[index]);
       this.tiles.splice(index, 1);
-      this.updateScrollerOverflows();
+      // this.updateScrollerOverflows();
     } else if (action === ACTION.SELECT && !this.justDropped) {
       this.piskelController.setCurrentFrameIndex(index);
     } else if (action === ACTION.NEW_FRAME) {
@@ -114,7 +121,7 @@
       var newtile = this.createPreviewTile_(this.tiles.length);
       this.tiles.push(newtile);
       this.previewList.insertBefore(newtile, this.addFrameTile);
-      this.updateScrollerOverflows();
+      // this.updateScrollerOverflows();
     } else if (action == ACTION.TOGGLE) {
       this.piskelController.toggleFrameVisibilityAt(index);
     }
@@ -191,11 +198,11 @@
     newFrameButton.className = 'add-frame-action';
     newFrameButton.setAttribute('data-tile-action', ACTION.NEW_FRAME);
     newFrameButton.innerHTML = '<div class="add-frame-action-icon icon-frame-plus-white">' +
-      '</div><div class="label">Add new frame</div>';
+      '</div>'; // + '<div class="label">Add new frame</div>'
     this.previewList.appendChild(newFrameButton);
     this.addFrameTile = newFrameButton;
 
-    this.updateScrollerOverflows();
+    // this.updateScrollerOverflows();
   };
 
   /**
@@ -260,11 +267,11 @@
     canvasContainer.classList.add('canvas-container', pskl.UserSettings.get(pskl.UserSettings.CANVAS_BACKGROUND));
 
     var height = this.zoom * this.piskelController.getCurrentFrame().getHeight();
-    var horizontalMargin = (Constants.PREVIEW_FILM_SIZE - height) / 2;
+    var horizontalMargin = (this.PREVIEW_FILM_SIZE - height) / 2;
     canvasContainer.style.marginTop = horizontalMargin + 'px';
 
     var width = this.zoom * this.piskelController.getCurrentFrame().getWidth();
-    var verticalMargin = (Constants.PREVIEW_FILM_SIZE - width) / 2;
+    var verticalMargin = (this.PREVIEW_FILM_SIZE - width) / 2;
     canvasContainer.style.marginLeft = verticalMargin + 'px';
     canvasContainer.style.marginRight = verticalMargin + 'px';
 
@@ -276,29 +283,29 @@
     previewTileRoot.appendChild(canvasContainer);
 
     // Add clone button
-    var cloneFrameButton = document.createElement('button');
-    cloneFrameButton.setAttribute('rel', 'tooltip');
-    cloneFrameButton.setAttribute('data-placement', 'right');
-    cloneFrameButton.setAttribute('data-tile-number', tileNumber);
-    cloneFrameButton.setAttribute('data-tile-action', ACTION.CLONE);
-    cloneFrameButton.setAttribute('title', 'Duplicate this frame');
-    cloneFrameButton.className = 'tile-overlay duplicate-frame-action icon-frame-duplicate-white';
-    previewTileRoot.appendChild(cloneFrameButton);
+    // var cloneFrameButton = document.createElement('button');
+    // cloneFrameButton.setAttribute('rel', 'tooltip');
+    // cloneFrameButton.setAttribute('data-placement', 'right');
+    // cloneFrameButton.setAttribute('data-tile-number', tileNumber);
+    // cloneFrameButton.setAttribute('data-tile-action', ACTION.CLONE);
+    // cloneFrameButton.setAttribute('title', 'Duplicate this frame');
+    // cloneFrameButton.className = 'tile-overlay duplicate-frame-action icon-frame-duplicate-white';
+    // previewTileRoot.appendChild(cloneFrameButton);
 
     // Add delete button
-    var deleteButton = document.createElement('button');
-    deleteButton.setAttribute('rel', 'tooltip');
-    deleteButton.setAttribute('data-placement', 'right');
-    deleteButton.setAttribute('title', 'Delete this frame');
-    deleteButton.setAttribute('data-tile-number', tileNumber);
-    deleteButton.setAttribute('data-tile-action', ACTION.DELETE);
-    deleteButton.className = 'tile-overlay delete-frame-action icon-frame-recyclebin-white';
-    previewTileRoot.appendChild(deleteButton);
+    // var deleteButton = document.createElement('button');
+    // deleteButton.setAttribute('rel', 'tooltip');
+    // deleteButton.setAttribute('data-placement', 'right');
+    // deleteButton.setAttribute('title', 'Delete this frame');
+    // deleteButton.setAttribute('data-tile-number', tileNumber);
+    // deleteButton.setAttribute('data-tile-action', ACTION.DELETE);
+    // deleteButton.className = 'tile-overlay delete-frame-action icon-frame-recyclebin-white';
+    // previewTileRoot.appendChild(deleteButton);
 
     // Add 'dragndrop handle'.
-    var dndHandle = document.createElement('div');
-    dndHandle.className = 'tile-overlay dnd-action icon-frame-dragndrop-white' ;
-    previewTileRoot.appendChild(dndHandle);
+    // var dndHandle = document.createElement('div');
+    // dndHandle.className = 'tile-overlay dnd-action icon-frame-dragndrop-white' ;
+    // previewTileRoot.appendChild(dndHandle);
 
     // Add tile count
     var tileCount = document.createElement('button');
@@ -339,6 +346,6 @@
     var frame = this.piskelController.getCurrentFrame();
     var frameSize = Math.max(frame.getHeight(), frame.getWidth());
 
-    return Constants.PREVIEW_FILM_SIZE / frameSize;
+    return this.PREVIEW_FILM_SIZE / frameSize;
   };
 })();

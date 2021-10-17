@@ -458,16 +458,19 @@
   };
 
   ns.DrawingController.prototype.getAvailableWidth_ = function () {
-    var leftSectionWidth = this.getSelectorWidth_('.left-column');
-    var rightSectionWidth = this.getSelectorWidth_('.right-column');
-    var toolsContainerWidth = this.getSelectorWidth_('#tool-section');
-    var settingsContainerWidth = this.getSelectorWidth_('#application-action-section');
+    // var leftSectionWidth = this.getSelectorWidth_('.left-column');
+    // var rightSectionWidth = this.getSelectorWidth_('.right-column');
 
-    var usedWidth = leftSectionWidth + rightSectionWidth + toolsContainerWidth + settingsContainerWidth;
-    var availableWidth = this.getSelectorWidth_('#main-wrapper') - usedWidth;
+    // var toolsContainerWidth = this.getSelectorWidth_('#tool-section');
+    // var settingsContainerWidth = this.getSelectorWidth_('#application-action-section');
 
-    var comfortMargin = 10;
-    return availableWidth - comfortMargin;
+    // var usedWidth =  leftSectionWidth + settingsContainerWidth + rightSectionWidth + toolsContainerWidth;
+    // var availableWidth = this.getSelectorWidth_('#main-wrapper') - usedWidth;
+
+    // var comfortMargin = 10;
+    // return availableWidth - comfortMargin;
+
+    return this.getSelectorWidth_('#main-wrapper');
   };
 
   ns.DrawingController.prototype.getContainerHeight_ = function () {

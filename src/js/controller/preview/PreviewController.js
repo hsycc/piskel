@@ -9,34 +9,31 @@
     this.piskelController = piskelController;
     this.container = container;
 
+    this.PREVIEW_SIZE = container.offsetWidth || PREVIEW_SIZE;
     this.elapsedTime = 0;
     this.currentIndex = 0;
     this.lastRenderTime = 0;
     this.renderFlag = true;
 
     this.renderer = new pskl.rendering.frame.BackgroundImageFrameRenderer(this.container);
-    this.popupPreviewController = new ns.PopupPreviewController(piskelController);
-    this.previewActionsController = new ns.PreviewActionsController(this, container);
+    // this.popupPreviewController = new ns.PopupPreviewController(piskelController); // 迷你地图单独标签页 控制器
+    // this.previewActionsController = new ns.PreviewActionsController(this, container);
   };
 
   ns.PreviewController.prototype.init = function () {
-    var width = Constants.ANIMATED_PREVIEW_WIDTH + Constants.RIGHT_COLUMN_PADDING_LEFT;
-    document.querySelector('.right-column').style.width = width + 'px';
+    // var width = Constants.ANIMATED_PREVIEW_WIDTH + Constants.RIGHT_COLUMN_PADDING_LEFT;
+    // document.querySelector('.right-column').style.width = width + 'px';
 
     $.subscribe(Events.FRAME_SIZE_CHANGED, this.onFrameSizeChange_.bind(this));
     $.subscribe(Events.USER_SETTINGS_CHANGED, this.onUserSettingsChange_.bind(this));
     $.subscribe(Events.PISKEL_SAVE_STATE, this.setRenderFlag_.bind(this, true));
     $.subscribe(Events.PISKEL_RESET, this.setRenderFlag_.bind(this, true));
 
-    this.popupPreviewController.init();
-    this.previewActionsController.init();
+    // this.popupPreviewController.init();
+    // this.previewActionsController.init(); // 迷你框的 tooltip  zoom grid action
 
     this.updateZoom_();
     this.updateContainerDimensions_();
-  };
-
-  ns.PreviewController.prototype.openPopupPreview = function () {
-    this.popupPreviewController.open();
   };
 
   ns.PreviewController.prototype.onUserSettingsChange_ = function (evt, name, value) {
@@ -48,8 +45,8 @@
     }
   };
 
-  ns.PreviewController.prototype.updateZoom_ = function () {
-    var previewSize = pskl.UserSettings.get(pskl.UserSettings.PREVIEW_SIZE);
+  ns.PreviewController.prototype.updateZoom_ = function (previewSize = null) {
+    var previewSize = previewSize || pskl.UserSettings.get(pskl.UserSettings.PREVIEW_SIZE);
 
     var zoom;
     if (previewSize === 'original') {
@@ -89,7 +86,7 @@
       this.renderFlag = false;
       this.lastRenderTime = Date.now();
 
-      this.popupPreviewController.render(frame);
+      // this.popupPreviewController.render(frame);
     }
   };
 
@@ -114,8 +111,8 @@
    */
   ns.PreviewController.prototype.calculateZoom_ = function () {
     var frame = this.piskelController.getCurrentFrame();
-    var hZoom = PREVIEW_SIZE / frame.getHeight();
-    var wZoom = PREVIEW_SIZE / frame.getWidth();
+    var hZoom = this.PREVIEW_SIZE / frame.getHeight();
+    var wZoom = this.PREVIEW_SIZE / frame.getWidth();
 
     return Math.min(hZoom, wZoom);
   };
@@ -133,8 +130,8 @@
     var height;
 
     if (isSeamless) {
-      height = PREVIEW_SIZE;
-      width = PREVIEW_SIZE;
+      height = this.PREVIEW_SIZE;
+      width = this.PREVIEW_SIZE;
     } else {
       var zoom = this.getZoom();
       var frame = this.piskelController.getCurrentFrame();
@@ -146,11 +143,11 @@
     containerEl.style.height = height + 'px';
     containerEl.style.width = width + 'px';
 
-    var horizontalMargin = (PREVIEW_SIZE - height) / 2;
+    var horizontalMargin = (this.PREVIEW_SIZE - height) / 2;
     containerEl.style.marginTop = horizontalMargin + 'px';
     containerEl.style.marginBottom = horizontalMargin + 'px';
 
-    var verticalMargin = (PREVIEW_SIZE - width) / 2;
+    var verticalMargin = (this.PREVIEW_SIZE - width) / 2;
     containerEl.style.marginLeft = verticalMargin + 'px';
     containerEl.style.marginRight = verticalMargin + 'px';
   };
@@ -160,7 +157,8 @@
   };
 
   ns.PreviewController.prototype.shouldRender_ = function () {
-    return (this.renderFlag || this.popupPreviewController.renderFlag) &&
+    // this.renderFlag || this.popupPreviewController.renderFlag;
+    return (this.renderFlag) &&
             (Date.now() - this.lastRenderTime > RENDER_MINIMUM_DELAY);
   };
 })();

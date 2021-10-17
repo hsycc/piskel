@@ -50,10 +50,17 @@
       this.mouseStateService = new pskl.service.MouseStateService();
       this.mouseStateService.init();
 
+      this.paletteController = new pskl.controller.PaletteController();
+      this.paletteController.init();
 
       this.currentColorsService = new pskl.service.CurrentColorsService(this.piskelController);
       this.currentColorsService.init();
 
+      this.palettesListController = new pskl.controller.PalettesListController(this.currentColorsService);
+      this.palettesListController.init();
+
+      this.cursorCoordinatesController = new pskl.controller.CursorCoordinatesController(this.piskelController);
+      this.cursorCoordinatesController.init();
 
       this.drawingController = new pskl.controller.DrawingController(
         this.piskelController,
@@ -65,11 +72,26 @@
         document.querySelector('#animated-preview-canvas-container'));
       this.previewController.init();
 
+      this.minimapController = new pskl.controller.MinimapController(
+        this.piskelController,
+        this.previewController,
+        this.drawingController,
+        document.querySelector('.minimap-container'));
+      this.minimapController.init();
+
       this.framesListController = new pskl.controller.FramesListController(
         this.piskelController,
         document.querySelector('#preview-list-wrapper'));
       this.framesListController.init();
 
+      this.layersListController = new pskl.controller.LayersListController(this.piskelController);
+      this.layersListController.init();
+
+      this.settingsController = new pskl.controller.settings.SettingsController(this.piskelController);
+      this.settingsController.init();
+
+      this.dialogsController = new pskl.controller.dialogs.DialogsController(this.piskelController);
+      this.dialogsController.init();
 
       this.toolController = new pskl.controller.ToolController();
       this.toolController.init();
@@ -82,6 +104,12 @@
 
       this.notificationController = new pskl.controller.NotificationController();
       this.notificationController.init();
+
+      this.transformationsController = new pskl.controller.TransformationsController();
+      this.transformationsController.init();
+
+      this.progressBarController = new pskl.controller.ProgressBarController();
+      this.progressBarController.init();
 
       this.canvasBackgroundController = new pskl.controller.CanvasBackgroundController();
       this.canvasBackgroundController.init();
@@ -121,15 +149,22 @@
       this.beforeUnloadService = new pskl.service.BeforeUnloadService(this.piskelController);
       this.beforeUnloadService.init();
 
+      this.headerController = new pskl.controller.HeaderController(
+        this.piskelController,
+        this.savedStatusService);
+      this.headerController.init();
+
       this.penSizeService = new pskl.service.pensize.PenSizeService();
       this.penSizeService.init();
 
-      // this.penSizeController = new pskl.controller.PenSizeController();
-      // this.penSizeController.init();
+      this.penSizeController = new pskl.controller.PenSizeController();
+      this.penSizeController.init();
 
       this.fileDropperService = new pskl.service.FileDropperService(this.piskelController);
       this.fileDropperService.init();
 
+      this.userWarningController = new pskl.controller.UserWarningController(this.piskelController);
+      this.userWarningController.init();
 
       this.performanceReportService = new pskl.service.performance.PerformanceReportService(
         this.piskelController,
@@ -143,6 +178,7 @@
       this.drawingLoop.addCallback(this.render, this);
       this.drawingLoop.start();
 
+      this.initTooltips_();
 
       var piskelData = this.getPiskelInitData_();
       if (piskelData && piskelData.piskel) {
@@ -151,6 +187,24 @@
 
       if (pskl.devtools) {
         pskl.devtools.init();
+      }
+
+      if (pskl.utils.Environment.detectNodeWebkit() && pskl.utils.UserAgent.isMac) {
+        var gui = require('nw.gui');
+        var mb = new gui.Menu({type : 'menubar'});
+        mb.createMacBuiltin('Piskel');
+        gui.Window.get().menu = mb;
+      }
+
+      if (!pskl.utils.Environment.isIntegrationTest() && pskl.utils.UserAgent.isUnsupported()) {
+        $.publish(Events.DIALOG_SHOW, {
+          dialogId : 'unsupported-browser'
+        });
+      }
+
+      if (pskl.utils.Environment.isDebug()) {
+        pskl.app.shortcutService.registerShortcut(pskl.service.keyboard.Shortcuts.DEBUG.RELOAD_STYLES,
+          window.reloadStyles);
       }
     },
 
@@ -205,4 +259,3 @@
     }
   };
 })();
-

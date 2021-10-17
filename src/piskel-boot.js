@@ -14,15 +14,15 @@
   }
 
   window._onPiskelReady = function () {
-    var loadingMask = document.getElementById('loading-mask');
-    loadingMask.style.opacity = 0;
-    window.setTimeout(function () {loadingMask.parentNode.removeChild(loadingMask);}, 600);
+    // var loadingMask = document.getElementById('loading-mask');
+    // loadingMask.style.opacity = 0;
+    // window.setTimeout(function () {loadingMask.parentNode.removeChild(loadingMask);}, 600);
     pskl.app.init();
     pskl._releaseVersion = '@@releaseVersion';
     // cleanup
-    delete window.pskl_exports;
-    delete window.loadDebugScripts;
-    delete window.done;
+    // delete window.pskl_exports;
+    // delete window.loadDebugScripts;
+    // delete window.done;
 
     // Run Piskel ready callbacks
     for (var i = 0; i < window.piskelReadyCallbacks.length; i++) {
@@ -83,7 +83,7 @@
       }
     };
 
-    loadScript('piskel-style-list.js', 'loadStyles()');
+    // loadScript('piskel-style-list.js', 'loadStyles()');
   } else {
     var script;
     if (window.location.href.indexOf('pack') != -1) {
@@ -92,7 +92,7 @@
       script = 'js/piskel-packaged-min' + version + '.js';
     }
 
-    loadStyle('css/piskel-style-packaged' + version + '.css');
+    // loadStyle('css/piskel-style-packaged' + version + '.css');
     loadScript(script, '_onPiskelReady()');
   }
 })();
