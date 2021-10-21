@@ -1,13 +1,13 @@
 // TODO(grosbouddha): put under pskl namespace.
 var Constants = {
   DEFAULT : {
-    HEIGHT : 32,
-    WIDTH : 32,
-    FPS : 12,
+    HEIGHT : 18,
+    WIDTH : 18,
+    FPS : 16,
     LAYER_OPACITY : 0.2
   },
 
-  MODEL_VERSION : 2,
+  MODEL_VERSION : 1, // 新项目，目前没有历史包袱，所以直接用最新的结构
 
   MAX_HEIGHT : 1024,
   MAX_WIDTH : 1024,
@@ -41,7 +41,7 @@ var Constants = {
   TOOL_HIGHLIGHT_COLOR_LIGHT: 'rgba(255, 255, 255, 0.2)',
   TOOL_HIGHLIGHT_COLOR_DARK: 'rgba(0, 0, 0, 0.2)',
 
-  ZOOMED_OUT_BACKGROUND_COLOR : '#A0A0A0',
+  ZOOMED_OUT_BACKGROUND_COLOR : '#000000' , // '#A0A0A0'
 
   LEFT_BUTTON : 0,
   MIDDLE_BUTTON : 1,

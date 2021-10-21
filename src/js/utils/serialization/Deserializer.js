@@ -12,13 +12,16 @@
   ns.Deserializer.deserialize = function (data, onSuccess, onError) {
     try {
       var deserializer;
-      if (data.modelVersion == Constants.MODEL_VERSION) {
-        deserializer = new ns.Deserializer(data, onSuccess);
-      } else if (data.modelVersion == 1) {
-        deserializer = new ns.backward.Deserializer_v1(data, onSuccess);
-      } else {
-        deserializer = new ns.backward.Deserializer_v0(data, onSuccess);
-      }
+
+      // 没有历史包袱， 直接用最新的。
+      deserializer = new ns.Deserializer(data, onSuccess);
+      // if (data.modelVersion == Constants.MODEL_VERSION) {
+      //   deserializer = new ns.Deserializer(data, onSuccess);
+      // } else if (data.modelVersion == 1) {
+      //   deserializer = new ns.backward.Deserializer_v1(data, onSuccess);
+      // } else {
+      //   deserializer = new ns.backward.Deserializer_v0(data, onSuccess);
+      // }
       deserializer.deserialize();
     } catch (e) {
       console.error(e);

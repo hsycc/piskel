@@ -26,7 +26,7 @@
     PREFERENCES_TAB: 'PREFERENCES_TAB',
     KEY_TO_DEFAULT_VALUE_MAP_ : {
       'GRID_COLOR' : 'rgba(0, 0, 0, 1)' || Constants.TRANSPARENT_COLOR,
-      'GRID_ENABLED' : true,
+      'GRID_ENABLED' : false,
       'GRID_WIDTH' : 1,
       'GRID_SPACING' : 1,
       'MAX_FPS' : 24,
@@ -49,7 +49,7 @@
       'RESIZE_SETTINGS': {
         maintainRatio : true,
         resizeContent : false,
-        origin : 'TOPLEFT'
+        origin :  'MIDDLE' , // 'TOPLEFT'
       },
       COLOR_FORMAT: 'hex',
       TRANSFORM_SHOW_MORE: false,

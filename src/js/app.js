@@ -9,7 +9,7 @@
    */
   ns.app = {
 
-    init : function () {
+    init : function (piskelName) {
       /**
        * When started from APP Engine, appEngineToken_ (Boolean) should be set on window.pskl
        */
@@ -23,7 +23,7 @@
 
       var size = pskl.UserSettings.get(pskl.UserSettings.DEFAULT_SIZE);
       var fps = Constants.DEFAULT.FPS;
-      var descriptor = new pskl.model.piskel.Descriptor('New Piskel', '');
+      var descriptor = new pskl.model.piskel.Descriptor(piskelName || 'New Piskel', '');
       var piskel = new pskl.model.Piskel(size.width, size.height, fps, descriptor);
 
       var layer = new pskl.model.Layer('Layer 1');
@@ -104,8 +104,9 @@
       this.storageService = new pskl.service.storage.StorageService(this.piskelController);
       this.storageService.init();
 
-      this.importService = new pskl.service.ImportService(this.piskelController);
-      this.importService.init();
+      // 好像没有用
+      // this.importService = new pskl.service.ImportService(this.piskelController);
+      // this.importService.init();
 
       this.imageUploadService = new pskl.service.ImageUploadService();
       this.imageUploadService.init();
@@ -118,8 +119,8 @@
       this.backupService = new pskl.service.BackupService(this.piskelController);
       this.backupService.init();
 
-      this.beforeUnloadService = new pskl.service.BeforeUnloadService(this.piskelController);
-      this.beforeUnloadService.init();
+      // this.beforeUnloadService = new pskl.service.BeforeUnloadService(this.piskelController);
+      // this.beforeUnloadService.init();
 
       this.penSizeService = new pskl.service.pensize.PenSizeService();
       this.penSizeService.init();
@@ -144,11 +145,6 @@
       this.drawingLoop.start();
 
 
-      var piskelData = this.getPiskelInitData_();
-      if (piskelData && piskelData.piskel) {
-        this.loadPiskel_(piskelData);
-      }
-
       if (pskl.devtools) {
         pskl.devtools.init();
       }
@@ -166,20 +162,6 @@
       });
     },
 
-    getPiskelInitData_ : function () {
-      return pskl.appEnginePiskelData_;
-    },
-
-    isLoggedIn : function () {
-      var piskelData = this.getPiskelInitData_();
-      return piskelData && piskelData.isLoggedIn;
-    },
-
-    initTooltips_ : function () {
-      $('body').tooltip({
-        selector: '[rel=tooltip]'
-      });
-    },
 
     render : function (delta) {
       this.drawingController.render(delta);
