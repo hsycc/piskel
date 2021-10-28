@@ -85,12 +85,13 @@
       this.container.addEventListener('wheel', this.onMousewheel_.bind(this));
     }
 
-    window.addEventListener('mouseup', this.onMouseup_.bind(this));
-    window.addEventListener('mousemove', this.onMousemove_.bind(this));
-    window.addEventListener('keyup', this.onKeyup_.bind(this));
-    window.addEventListener('touchstart', this.onTouchstart_.bind(this));
-    window.addEventListener('touchmove' , this.onTouchmove_.bind(this));
-    window.addEventListener('touchend', this.onTouchend_.bind(this));
+    this.container.addEventListener('mouseup', this.onMouseup_.bind(this));
+    this.container.addEventListener('mousemove', this.onMousemove_.bind(this));
+    this.container.addEventListener('keyup', this.onKeyup_.bind(this));
+    this.container.addEventListener('touchstart', this.onTouchstart_.bind(this));
+    // fixed 谷歌浏览器 模拟器, { passive : true }
+    this.container.addEventListener('touchmove' , this.onTouchmove_.bind(this), { passive : true });
+    this.container.addEventListener('touchend', this.onTouchend_.bind(this));
 
     // Deactivate right click:
     document.body.addEventListener('contextmenu', this.onCanvasContextMenu_.bind(this));
