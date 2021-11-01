@@ -92,7 +92,6 @@
    */
   ns.ToolController.prototype.onToolIconClicked_ = function(evt) {
 
-    console.log(evt, 222);
     var target = evt.target;
     var clickedTool = pskl.utils.Dom.getParentWithData(target, 'toolId');
 

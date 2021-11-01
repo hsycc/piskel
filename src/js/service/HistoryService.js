@@ -86,10 +86,16 @@
 
   ns.HistoryService.prototype.undo = function () {
     this.loadState(this.currentIndex - 1);
+    // TODO: 移动端不止为何在 画笔工具， 会将绘画渲染在 overlayFrame 上， 需要去了解深层逻辑,
+    //       这里直接在 撤销动作是去清除掉 overlayFrame
+    //       暂时没有返现其他问题
+    pskl.app.drawingController.overlayFrame.clear();
   };
 
   ns.HistoryService.prototype.redo = function () {
     this.loadState(this.currentIndex + 1);
+    // redo 没有渲染问题， 保险起见 , + 下这个操作
+    pskl.app.drawingController.overlayFrame.clear();
   };
 
   ns.HistoryService.prototype.isLoadStateAllowed_ = function (index) {

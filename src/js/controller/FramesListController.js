@@ -121,6 +121,12 @@
       var newtile = this.createPreviewTile_(this.tiles.length);
       this.tiles.push(newtile);
       this.previewList.insertBefore(newtile, this.addFrameTile);
+
+      // TODO: 移动端不止为何在 画笔工具， 会将 绘画渲染在 overlayFrame 上， 需要去了解深层逻辑,
+      //       这里直接在新建帧去清除掉 overlayFrame
+      //       暂时没有返现其他为
+      pskl.app.drawingController.overlayFrame.clear();
+
       // this.updateScrollerOverflows();
     } else if (action == ACTION.TOGGLE) {
       this.piskelController.toggleFrameVisibilityAt(index);

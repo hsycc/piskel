@@ -7,6 +7,7 @@
     this.previousTime = 0;
     this.callbacks = [];
     this.loop_ = this.loop_.bind(this);
+    window.loopFlag =  false;
   };
 
   ns.DrawingLoop.prototype.addCallback = function (callback, scope, args) {
@@ -37,10 +38,15 @@
     var delta = currentTime - this.previousTime;
     this.executeCallbacks_(delta);
     this.previousTime = currentTime;
-    this.requestAnimationFrame.call(window, this.loop_);
+    if (!window.loopFlag) {
+      this.requestAnimationFrame.call(window, this.loop_);
+    } else {
+      console.log('stop loop_');
+    }
   };
 
   ns.DrawingLoop.prototype.executeCallbacks_ = function (deltaTime) {
+
     for (var i = 0 ; i < this.callbacks.length ; i++) {
       var cb = this.callbacks[i];
       cb.fn.call(cb.scope, deltaTime, cb.args);
@@ -51,12 +57,20 @@
     this.isRunning = false;
   };
 
+  ns.DrawingLoop.prototype.destroy = function () {
+    this.isRunning = false;
+    this.previousTime = 0;
+    this.callbacks = [];
+    window.loopFlag = true;
+  };
+
+
   ns.DrawingLoop.prototype.getRequestAnimationFrameShim_ = function () {
     var requestAnimationFrame = window.requestAnimationFrame ||
                   window.mozRequestAnimationFrame ||
                   window.webkitRequestAnimationFrame ||
-                  window.msRequestAnimationFrame ||
-                  function (callback) { window.setTimeout(callback, 1000 / 60); };
+                  window.msRequestAnimationFrame;
+    //  || function (callback) { window.setTimeout(callback, 1000 / 60); };
 
     return requestAnimationFrame;
   };

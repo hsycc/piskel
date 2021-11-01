@@ -90,7 +90,7 @@
     this.container.addEventListener('keyup', this.onKeyup_.bind(this));
     this.container.addEventListener('touchstart', this.onTouchstart_.bind(this));
     // fixed 谷歌浏览器 模拟器, { passive : true }
-    this.container.addEventListener('touchmove' , this.onTouchmove_.bind(this), { passive : true });
+    this.container.addEventListener('touchmove' , this.onTouchmove_.bind(this));
     this.container.addEventListener('touchend', this.onTouchend_.bind(this));
 
     // Deactivate right click:

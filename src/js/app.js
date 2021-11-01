@@ -9,6 +9,41 @@
    */
   ns.app = {
 
+    destroy: function () {
+
+      // 停止loop
+      window.loopFlag = true;
+      this.drawingLoop.destroy();
+
+      // 底部list
+      var e = document.querySelector('#preview-list');
+      var child = e.lastElementChild;
+      while (child) {
+        e.removeChild(child);
+        child = e.lastElementChild;
+      }
+
+      // 删除迷你区域的 canvas
+      document.querySelector('.background-image-frame-container').remove();
+
+      // 删除画布的canvas
+      // canvas-overlay
+      document.querySelector('.canvas-overlay').remove();
+      document.querySelector('.layers-above-canvas').remove();
+      document.querySelector('.onion-skin-canvas').remove();
+      document.querySelector('.layers-below-canvas').remove();
+      document.querySelector('.drawing-canvas').remove();
+
+
+      var intel = ['init', 'destroy', 'loadPiskel_', 'render', 'getFirstFrameAsPng', 'getFramesheetAsPng'];
+      Object.keys(pskl.app).forEach(v => {
+        if (!intel.includes(v)) {
+          delete pskl.app[v];
+        }
+      });
+
+    },
+
     init : function (piskelName) {
       /**
        * When started from APP Engine, appEngineToken_ (Boolean) should be set on window.pskl
@@ -141,6 +176,7 @@
       this.clipboardService.init();
 
       this.drawingLoop = new pskl.rendering.DrawingLoop();
+      window.test = false;
       this.drawingLoop.addCallback(this.render, this);
       this.drawingLoop.start();
 
