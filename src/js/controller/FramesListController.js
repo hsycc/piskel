@@ -116,6 +116,13 @@
       // this.updateScrollerOverflows();
     } else if (action === ACTION.SELECT && !this.justDropped) {
       this.piskelController.setCurrentFrameIndex(index);
+      // TODO: 移动端不止为何在 画笔工具， 会将 绘画渲染在 overlayFrame 上， 需要去了解深层逻辑,
+      //       这里直接在切换选择帧去清除掉 overlayFrame
+      //       暂时没有返现其他为
+      // 同下
+      pskl.app.drawingController.overlayFrame.clear();
+
+
     } else if (action === ACTION.NEW_FRAME) {
       this.piskelController.addFrame();
       var newtile = this.createPreviewTile_(this.tiles.length);

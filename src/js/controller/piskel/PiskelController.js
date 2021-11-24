@@ -148,13 +148,9 @@
     });
 
     // Update the array of hidden frames since some hidden indexes might have shifted.
-    this.piskel.hiddenFrames = this.piskel.hiddenFrames.map(function (hiddenIndex) {
-      if (hiddenIndex > index) {
-        return hiddenIndex - 1;
-      }
-      return hiddenIndex;
+    this.piskel.hiddenFrames = this.piskel.hiddenFrames.filter(function (hiddenIndex) {
+      return hiddenIndex !== index;
     });
-
     // Current frame index is impacted if the removed frame was before the current frame
     if (this.currentFrameIndex >= index && this.currentFrameIndex > 0) {
       this.setCurrentFrameIndex(this.currentFrameIndex - 1);
